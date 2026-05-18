@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixelmagnet - Digital Marketing Blog</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Plus Jakarta Sans Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        /* Custom Brand Color overrides */
+        .bg-pm-blue { background-color: #0052FF !important; }
+        .text-pm-blue { color: #0052FF !important; }
+        .bg-pm-yellow { background-color: #FFD02B !important; }
+        
+        /* Interactive Animations & States */
+        .pm-card {
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .pm-card:hover {
+            transform: translateY(-5px);
+        }
+        .pm-card img {
+            transition: transform 0.3s ease;
+            object-fit: cover;
+        }
+        .pm-card:hover img {
+            transform: scale(1.03);
+        }
+        /* Circular Action Arrow */
+        .action-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        .pm-card:hover .action-btn {
+            transform: scale(1.1) rotate(45deg);
+        }
+        /* Progress Bar */
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            width: 0%;
+            z-index: 1050;
+            background: linear-gradient(90deg, #0052FF, #FFD02B);
+        }
+    </style>
+</head>
+<body class="bg-light text-dark">
+
+    <div id="progress-bar"></div>
+
+    <!-- Navigation Header -->
+    <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-white border-bottom bg-opacity-95 shadow-sm">
+        <div class="container py-2">
+            <a class="navbar-brand fw-extrabold text-uppercase d-flex align-items-center" href="#" style="letter-spacing: -0.5px;">
+                <i class="bi bi-magnet-fill text-pm-blue me-2"></i>Pixelmagnet
+            </a>
+            
+            <div class="d-flex align-items-center order-lg-3 gap-2">
+                <button class="btn btn-link text-dark p-2" id="themeToggle" title="Toggle Mode">
+                    <i class="bi bi-moon-stars-fill"></i>
+                </button>
+                <button class="btn btn-outline-dark rounded-pill px-3 btn-sm d-flex align-items-center gap-1" id="savedBtn">
+                    <i class="bi bi-bookmark-heart"></i> Saved (<span id="savedCount">0</span>)
+                </button>
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse justify-content-center order-lg-2" id="navbarNav">
+                <ul class="navbar-nav gap-1">
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Services</a></li>
+                    <li class="nav-item"><a class="nav-link active fw-bold text-pm-blue" href="#">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container py-5">
+        
+        <!-- Headline & Search -->
+        <div class="row align-items-center mb-5 g-3">
+            <div class="col-md-7">
+                <span class="text-pm-blue fw-bold text-uppercase small tracking-wider" style="letter-spacing: 1.5px;">Our Insights</span>
+                <h1 class="display-3 fw-extrabold text-dark m-0 mt-1">BLOG.</h1>
+            </div>
+            <div class="col-md-5">
+                <div class="position-relative">
+                    <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                    <input type="text" class="form-control rounded-pill ps-5 py-2.5 shadow-sm border" id="searchInput" placeholder="Search blog posts...">
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Pill row -->
+        <div class="d-flex gap-2 overflow-x-auto pb-2 mb-4" style="white-space: nowrap;">
+            <button class="btn btn-primary rounded-pill btn-sm px-4 py-2 filter-btn active" onclick="filterCategory('all', this)">All Articles</button>
+            <button class="btn btn-outline-secondary rounded-pill btn-sm px-4 py-2 filter-btn" onclick="filterCategory('design', this)">Creative & Design</button>
+            <button class="btn btn-outline-secondary rounded-pill btn-sm px-4 py-2 filter-btn" onclick="filterCategory('marketing', this)">Email Marketing</button>
+            <button class="btn btn-outline-secondary rounded-pill btn-sm px-4 py-2 filter-btn" onclick="filterCategory('strategy', this)">Business & Strategy</button>
+            <button class="btn btn-outline-secondary rounded-pill btn-sm px-4 py-2 filter-btn" onclick="filterCategory('tech', this)">Web Tech</button>
+        </div>
+
+        <!-- Blog Grid Area -->
+        <div class="row g-4" id="blogGrid">
+            
+            <!-- Item 1: Featured Post (Creative Direction) -->
+            <div class="col-12 post-item" data-category="design">
+                <div class="card pm-card border-0 rounded-4 shadow-sm bg-white overflow-hidden">
+                    <div class="row g-0 align-items-center">
+                        <div class="col-lg-7">
+                            <div class="overflow-hidden ratio ratio-21x9" style="min-height: 280px;">
+                                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80" alt="Creative direction">
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="card-body p-4 p-md-5">
+                                <div class="text-pm-blue small fw-bold text-uppercase tracking-wider mb-2">Creative Direction</div>
+                                <h2 class="card-title fw-extrabold h3 mb-3">INTRODUCING: A BRAND NEW SUB-MARKET FOR CREATIVE DIRECTION.</h2>
+                                <p class="card-text text-muted small mb-4">Discover the architectural visualization and design structures shaping physical and digital strategy environments globally.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small"><i class="bi bi-clock me-1"></i> 5 min read</span>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-light rounded-circle" onclick="toggleSaved('INTRODUCING: A BRAND NEW SUB-MARKET')"><i class="bi bi-bookmark"></i></button>
+                                        <button class="action-btn bg-pm-blue text-white border-0" onclick="alertArticle('INTRODUCING: A BRAND NEW SUB-MARKET')"><i class="bi bi-arrow-right"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2: Yellow Accent Card (Email Marketing) -->
+            <div class="col-md-6 post-item" data-category="marketing">
+                <div class="card pm-card border-0 rounded-4 shadow-sm bg-pm-yellow text-dark h-100 overflow-hidden">
+                    <div class="overflow-hidden ratio ratio-16x9">
+                        <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&q=80" alt="Email templates">
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="text-dark opacity-75 small fw-bold text-uppercase tracking-wider mb-2">Templates</div>
+                            <h3 class="card-title fw-extrabold h4 mb-3">EAT, ALONE - EMAIL MARKETING TEMPLATES AND RECIPES.</h3>
+                            <p class="card-text text-dark opacity-75 small mb-4">Elevate your brand with email marketing tactics designed to drive engagement rates.</p>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="small fw-bold"><i class="bi bi-clock me-1"></i> 4 min read</span>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-light bg-opacity-25 border-0 rounded-circle text-dark" onclick="toggleSaved('EAT, ALONE - EMAIL MARKETING')"><i class="bi bi-bookmark"></i></button>
+                                <button class="action-btn bg-dark text-white border-0" onclick="alertArticle('EAT, ALONE - EMAIL MARKETING')"><i class="bi bi-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3: White Accent Card (Design Philosophy) -->
+            <div class="col-md-6 post-item" data-category="design">
+                <div class="card pm-card border-0 rounded-4 shadow-sm bg-white h-100 overflow-hidden">
+                    <div class="overflow-hidden ratio ratio-16x9">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80" alt="Design Phil">
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="text-pm-blue small fw-bold text-uppercase tracking-wider mb-2">Inspiration</div>
+                            <h3 class="card-title fw-extrabold h4 mb-3">WHAT MAKES YOUR DESIGN AWESOME?</h3>
+                            <p class="card-text text-muted small mb-4">Direct analysis of key layouts and why premium visual aesthetics yield high business value.</p>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted small"><i class="bi bi-clock me-1"></i> 3 min read</span>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-light rounded-circle" onclick="toggleSaved('WHAT MAKES YOUR DESIGN AWESOME?')"><i class="bi bi-bookmark"></i></button>
+                                <button class="action-btn bg-pm-blue text-white border-0" onclick="alertArticle('WHAT MAKES YOUR DESIGN AWESOME?')"><i class="bi bi-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 4: Landscape Banner (Redwood Forest) -->
+            <div class="col-12 post-item" data-category="strategy">
+                <div class="card pm-card border-0 rounded-4 shadow-sm bg-white overflow-hidden">
+                    <div class="row g-0 align-items-center">
+                        <div class="col-lg-7">
+                            <div class="overflow-hidden ratio ratio-21x9" style="min-height: 280px;">
+                                <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=80" alt="Forest Alignment">
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="card-body p-4 p-md-5">
+                                <div class="text-pm-blue small fw-bold text-uppercase tracking-wider mb-2">Cross-Media</div>
+                                <h2 class="card-title fw-extrabold h3 mb-3">BLUEPRINT FOR ALIGNMENT BETWEEN PAPER &amp; PIXEL.</h2>
+                                <p class="card-text text-muted small mb-4">A tactical strategy template designed to create branding parity between printed works and responsive digital media platforms.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small"><i class="bi bi-clock me-1"></i> 6 min read</span>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-light rounded-circle" onclick="toggleSaved('BLUEPRINT FOR ALIGNMENT')"><i class="bi bi-bookmark"></i></button>
+                                        <button class="action-btn bg-pm-blue text-white border-0" onclick="alertArticle('BLUEPRINT FOR ALIGNMENT')"><i class="bi bi-arrow-right"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 5: Web Color Schemes -->
+            <div class="col-md-6 post-item" data-category="tech">
+                <div class="card pm-card border-0 rounded-4 shadow-sm bg-white h-100 overflow-hidden">
+                    <div class="overflow-hidden ratio ratio-16x9">
+                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=600&q=80" alt="Color Schemes">
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="text-pm-blue small fw-bold text-uppercase tracking-wider mb-2">Web Design</div>
+                            <h3 class="card-title fw-extrabold h4 mb-3">HOW TO CREATE WEB-READY COLOR SCHEMES IN MINUTES.</h3>
+                            <p class="card-text text-muted small mb-4">Fast dynamic methods to design robust color palettes that automatically comply with Web accessibility metrics.</p>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted small"><i class="bi bi-clock me-1"></i> 3 min read</span>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-light rounded-circle" onclick="toggleSaved('HOW TO CREATE WEB-READY COLORS')"><i class="bi bi-bookmark"></i></button>
+                                <button class="action-btn bg-pm-blue text-white border-0" onclick="alertArticle('HOW TO CREATE WEB-READY COLORS')"><i class="bi bi-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 6: Think Outside Box -->
+            <div class="col-md-6 post-item" data-category="design">
+                <div class="card pm-card border-0 rounded-4 shadow-sm bg-white h-100 overflow-hidden">
+                    <div class="overflow-hidden ratio ratio-16x9">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80" alt="Creative outside box">
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="text-pm-blue small fw-bold text-uppercase tracking-wider mb-2">Ideation</div>
+                            <h3 class="card-title fw-extrabold h4 mb-3">DESIGNERS ALWAYS THINK OUTSIDE THE BOX.</h3>
+                            <p class="card-text text-muted small mb-4">Exploring layouts and when to break standard grid logic to unlock creative outcomes.</p>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted small"><i class="bi bi-clock me-1"></i> 7 min read</span>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-light rounded-circle" onclick="toggleSaved('DESIGNERS ALWAYS THINK OUTSIDE THE BOX')"><i class="bi bi-bookmark"></i></button>
+                                <button class="action-btn bg-pm-blue text-white border-0" onclick="alertArticle('DESIGNERS ALWAYS THINK OUTSIDE THE BOX')"><i class="bi bi-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- No Results Found -->
+        <div class="text-center py-5 d-none" id="emptyState">
+            <i class="bi bi-search fs-1 text-muted"></i>
+            <h4 class="mt-3">No matching articles found</h4>
+            <button class="btn btn-outline-primary btn-sm rounded-pill mt-2" onclick="resetSearch()">Show All Posts</button>
+        </div>
+
+        <!-- Call to Action (CTA) -->
+        <div class="bg-pm-blue text-white rounded-4 p-5 mt-5 shadow position-relative overflow-hidden">
+            <div class="row align-items-center position-relative" style="z-index: 2;">
+                <div class="col-lg-8">
+                    <h2 class="fw-extrabold display-6 text-white mb-2">LET'S MAGNETIZE YOUR ONLINE PRESENCE WITH CREATIVE PROWESS.</h2>
+                    <p class="opacity-75 mb-4 mb-lg-0">Subscribe today for design principles, strategies, and code snippets.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <button class="btn btn-light text-primary btn-lg rounded-pill px-4 fw-bold shadow" onclick="subscribePrompt()">Subscribe Now</button>
+                </div>
+            </div>
+            <!-- Simple background circle decoration -->
+            <div class="position-absolute rounded-circle bg-white opacity-10" style="width: 300px; height: 300px; right: -50px; bottom: -50px; pointer-events: none;"></div>
+        </div>
+
+    </main>
+
+    <!-- Simple Dark Footer -->
+    <footer class="bg-dark text-white-50 py-5 mt-5">
+        <div class="container text-center">
+            <h5 class="text-white fw-bold mb-3"><i class="bi bi-magnet-fill text-pm-blue me-2"></i>PIXELMAGNET</h5>
+            <p class="small mx-auto mb-4" style="max-width: 450px;">High caliber design templates, content strategies, and tech engineering frameworks.</p>
+            <hr class="border-secondary opacity-25">
+            <p class="small mb-0">&copy; 2026 Pixelmagnet Agency. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Simplified Modal Display for Articles / Messages -->
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header border-0 bg-light rounded-top-4">
+                    <h5 class="modal-title fw-bold" id="infoModalTitle">Pixelmagnet Reader</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4" id="infoModalBody">
+                    Modal text.
+                </div>
+                <div class="modal-footer border-0 bg-light rounded-bottom-4">
+                    <button type="button" class="btn btn-primary rounded-pill px-4" data-bs-dismiss="modal">Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        const savedArticles = new Set();
+        const infoModal = new bootstrap.Modal(document.getElementById('infoModal'));
+
+        // Notification Modal helper instead of system alert()
+        function showMessage(title, text) {
+            document.getElementById('infoModalTitle').textContent = title;
+            document.getElementById('infoModalBody').textContent = text;
+            infoModal.show();
+        }
+
+        // Action read/details trigger
+        function alertArticle(title) {
+            showMessage("Reading Article", `Enjoying "${title}"? This would load the fully formatted, mobile-friendly article content layout inside this custom view.`);
+        }
+
+        // Quick Subscribe
+        function subscribePrompt() {
+            showMessage("Join the Insights List", "Please check back for physical subscription forms, or input your email inside upcoming newsletter blocks!");
+        }
+
+        // Bookmark saved list toggle
+        function toggleSaved(title) {
+            event.stopPropagation();
+            if (savedArticles.has(title)) {
+                savedArticles.delete(title);
+                showMessage("Bookmark Removed", `"${title}" removed from your saved list.`);
+            } else {
+                savedArticles.add(title);
+                showMessage("Bookmark Saved", `"${title}" has been saved to your local storage bookmarks!`);
+            }
+            document.getElementById('savedCount').textContent = savedArticles.size;
+        }
+
+        // Saved list overview click
+        document.getElementById('savedBtn').addEventListener('click', () => {
+            if(savedArticles.size === 0) {
+                showMessage("Saved Articles", "You haven't bookmarked any articles yet! Click the bookmark icon on any card to save them.");
+            } else {
+                showMessage("Your Saved Bookmarks", Array.from(savedArticles).join("\n• "));
+            }
+        });
+
+        // Simplified Categorical live filter
+        function filterCategory(category, button) {
+            // Update Active class on button list
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = "btn btn-outline-secondary rounded-pill btn-sm px-4 py-2 filter-btn";
+            });
+            button.className = "btn btn-primary rounded-pill btn-sm px-4 py-2 filter-btn active";
+
+            // Grid items visibility toggle
+            const items = document.querySelectorAll('.post-item');
+            let found = 0;
+            items.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    item.classList.remove('d-none');
+                    found++;
+                } else {
+                    item.classList.add('d-none');
+                }
+            });
+            toggleEmptyState(found);
+        }
+
+        // Simple Live search query filter
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            const items = document.querySelectorAll('.post-item');
+            let found = 0;
+
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    item.classList.remove('d-none');
+                    found++;
+                } else {
+                    item.classList.add('d-none');
+                }
+            });
+            toggleEmptyState(found);
+        });
+
+        function resetSearch() {
+            document.getElementById('searchInput').value = '';
+            filterCategory('all', document.querySelector('.filter-btn'));
+        }
+
+        function toggleEmptyState(visibleCount) {
+            const state = document.getElementById('emptyState');
+            if(visibleCount === 0) state.classList.remove('d-none');
+            else state.classList.add('d-none');
+        }
+
+        // Dark/Light Theme Switching
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.body.classList.contains('bg-dark');
+            if(isDark) {
+                document.body.className = "bg-light text-dark";
+                document.querySelector('.navbar').className = "navbar navbar-expand-lg sticky-top navbar-light bg-white border-bottom bg-opacity-95 shadow-sm";
+                themeToggle.innerHTML = '<i class="bi bi-moon-stars-fill"></i>';
+            } else {
+                document.body.className = "bg-dark text-white";
+                document.querySelector('.navbar').className = "navbar navbar-expand-lg sticky-top navbar-dark bg-dark border-bottom border-secondary bg-opacity-95 shadow-sm";
+                themeToggle.innerHTML = '<i class="bi bi-sun-fill text-warning"></i>';
+            }
+        });
+
+        // Header Scrolling Progress Tracker 
+        window.addEventListener('scroll', () => {
+            const scroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const percentage = (scroll / height) * 100;
+            document.getElementById('progress-bar').style.width = percentage + '%';
+        });
+    </script>
+</body>
+</html>
